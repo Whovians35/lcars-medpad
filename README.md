@@ -123,6 +123,16 @@
 
 ---
 
+### 照片打卡（v17 新增）
+
+打卡面板底部多了「📷 照片存证」：
+
+- **拍一张**：直接调手机相机；**从相册选**：挑已经拍好的。
+- 照片会自动缩到最长边 720px 的 JPEG（一张约 40–80KB），存进浏览器的 IndexedDB。
+- **环形缓冲区，只保留当天**：每次打开 App 会把不是今天的照片清掉；同一天最多留 24 张，超出按时间丢最旧的。所以它永远不会把手机塞满，也永远不会把上周的隐私留在相册外。
+- 今天已拍的打卡，卡片上会多一个 📷，点它就能看大图（带拍摄时间）、也能删。
+- 换手机 / 清缓存前记得先「导出备份」——照片不进 JSON 备份，只在本机。
+
 ## 六、目录结构
 
 ```
@@ -150,44 +160,21 @@ node tests/core.test.mjs
 node tests/ui.smoke.mjs
 ```
 
-改了代码想立刻生效：把 `sw.js` 里的 `CACHE` 名字改一下（如 `medpad-v2`），
-手机上下次打开就会拿新版本，旧缓存自动清掉。
+改了代码想立刻生效：**把版本号 +1** —— `index.html` 里三处 `?v=N`、`sw.js` 里的 `CACHE='medpad-vN'`
+与 `CRITICAL`/`ASSETS` 里的 `?v=N` 一起改。手机下次联网打开会自动换上新版；
+万一新缓存没装齐，Service Worker 会继续用上一代缓存，不会白屏。
 
 ---
 
-## 七、署名
+## 七、署名与许可
 
-界面风格参考 **LCARS Inspired Website Template by [www.TheLCARS.com](https://www.thelcars.com/)**
-（Jim Robertus，个人非商业使用，已做修改，未直接引用其模板文件）。
-标题字体 **Antonio**（SIL OFL 1.1）。
-Star Trek、LCARS 为 CBS Studios 的商标；本项目为个人自用工具，与其无关联。
+作者：**张浩宇**　许可：**[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)**（知识共享 署名—非商业性使用 4.0 国际）
 
+- 你可以：自用、复制、修改、二次开发、免费分享（**允许演绎**）
+- 你必须：保留作者署名、说明改动过哪里、**不得用于商业用途**（演绎作品同样只能非商业使用）
+- 完整说明见 [`LICENSE`](LICENSE)，法律全文以 https://creativecommons.org/licenses/by-nc/4.0/legalcode 为准
 
-## 照片打卡（v17 新增）
-
-打卡面板底部多了「📷 照片存证」：
-
-- **拍一张**：直接调手机相机；**从相册选**：挑已经拍好的。
-- 照片会自动缩到最长边 720px 的 JPEG（一张约 40–80KB），存进浏览器的 IndexedDB。
-- **环形缓冲区，只保留当天**：每次打开 App 会把不是今天的照片清掉；同一天最多留 24 张，超出按时间丢最旧的。所以它永远不会把手机塞满，也永远不会把上周的隐私留在相册外。
-- 今天已拍的打卡，卡片上会多一个 📷，点它就能看大图（带拍摄时间）、也能删。
-- 换手机 / 清缓存前记得先「导出备份」——照片不进 JSON 备份，只在本机。
-
-
-## 署名与许可
-
-Author: **张浩宇** · License: **CC BY-NC 4.0**（知识共享 署名—非商业性使用 4.0 国际）
-
-你可以：用、改、二次开发、免费分享。
-你必须：保留署名、说明改动、**不得用于商业用途**（演绎作品同样只能非商业使用）。
-完整说明见仓库根目录的 `LICENSE`，全文以 https://creativecommons.org/licenses/by-nc/4.0/legalcode 为准。
-
-> 在 GPL 之外，这个项目故意选了一个"能看懂"的协议：许可条款就写在 App 的「设置 → 关于 · 署名与许可」里，
-> 打开 App 不用懂法律也能知道别人能拿它做什么。
-
-### 关于 CC 协议（一句话版）
-
-Creative Commons 是一套不用请律师的授权模板，用四个要素拼出来：
+### CC 协议的四个要素
 
 | 要素 | 含义 |
 | --- | --- |
@@ -196,15 +183,19 @@ Creative Commons 是一套不用请律师的授权模板，用四个要素拼出
 | **SA** 相同方式共享 | 改完必须用同一协议发布 |
 | **ND** 禁止演绎 | 只许原样转载，不许改 |
 
-本项目用 **BY + NC**：署名 + 非商业，但**允许演绎**（可以改、可以二次开发，改完仍然只能非商业使用）。
+本项目用 **BY + NC**：署名 + 非商业，但**允许演绎**。
 
 ### 第三方与商标
 
-- 界面风格参考 LCARS Inspired Website Template by [www.TheLCARS.com](https://www.thelcars.com/)（个人非商业使用，样式已修改，未使用其原始 CSS、未热链素材）。
-- 字体 Antonio，SIL Open Font License 1.1。
-- Star Trek / LCARS / U.S.S. / NCC 为 CBS Studios Inc. 商标；本项目是非官方粉丝作品，与 CBS 无关联，**不要上架应用商店**。
+- 界面风格参考 **LCARS Inspired Website Template by [www.TheLCARS.com](https://www.thelcars.com/)**（Jim Robertus，个人非商业使用，样式已修改，未使用其原始 CSS、未热链素材）。
+- 字体 **Antonio**，SIL Open Font License 1.1（字体文件随仓库再分发）。
+- 图标与全部界面元素为自绘（`tools/make_icons.py` 生成），不含第三方图片素材；未使用任何第三方 JS 库。
+- **Star Trek / LCARS / U.S.S. / NCC** 等为 CBS Studios Inc. 的商标；本项目是非官方的粉丝作品，与 CBS / Paramount 无关联，**不要上架应用商店**。
+- 本仓库不含任何剧集截图、影音或官方字体；需要提示音时自行放置 `assets/sound/redalert.mp4`，缺失时自动回落到合成音。
 
-## 上传到 GitHub（第一次传也能照做）
+---
+
+## 八、上传到 GitHub（第一次传也能照做）
 
 这个 App 是纯静态网页（HTML/CSS/JS），**不需要服务器、不需要数据库**。
 GitHub 提供一个免费网址，手机打开它就是完整功能（还能离线用）。
@@ -265,11 +256,3 @@ git push -u origin main
 `ERR_CONNECTION_REFUSED` 的原因）。GitHub Pages 部署好后，**用新网址重新「添加到主屏幕」一次**，
 再长按删掉旧图标即可。旧数据在浏览器里，删图标不会清掉；但换到新网址等于换了「站点」，数据不共享，
 所以先在旧 App 里 **设置 → 导出备份（.JSON）**，到新网址里 **从备份导入** 一次。
-
-## 许可与说明（给仓库访客看的）
-
-- 作者：**张浩宇**
-- 许可：[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)（署名—非商业性使用），**允许演绎**；全文见 [`LICENSE`](LICENSE)
-- 第三方：界面风格参考 [TheLCARS.com](https://www.thelcars.com/)（个人非商业使用，样式已修改）；字体 Antonio（SIL OFL 1.1）
-- 商标：Star Trek / LCARS / U.S.S. / NCC 等为 CBS Studios Inc. 商标；本项目是非官方粉丝作品，与 CBS / Paramount 无关联，不上架应用商店
-- 提示音：仓库不含任何剧集录音；需要时自行放置 `assets/sound/redalert.mp4`，缺失自动回落到合成音
