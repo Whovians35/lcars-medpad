@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#000000" />
+<meta name="description" content="LCARS 风格的用药提醒与库存计算器：记录早中晚剂量、自动算清哪天吃完、一键打卡、离线可用。" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>用药助手 · LCARS</title>
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icons/icon-192.png" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="stylesheet" href="app.css?v=22" />
+</head>
+<body>
+
+<!-- 左侧 LCARS 竖脊（纯装饰） -->
+<div class="spine" aria-hidden="true">
+  <span class="spine-cap">47</span>
+  <span class="spine-seg" style="background:var(--lilac)"></span>
+  <span class="spine-seg" style="background:#1c1c1c"></span>
+  <span class="spine-seg" style="background:var(--sky)"></span>
+  <span class="spine-txt">LCARS 47 · MEDPAD</span>
+  <span class="spine-seg" style="background:var(--almond)"></span>
+  <span class="spine-seg" style="background:#1c1c1c"></span>
+  <span class="spine-seg" style="background:var(--orange)"></span>
+</div>
+
+<div class="shell">
+
+  <header class="hdr">
+    <div class="hdr-cap" aria-hidden="true">47</div>
+    <div class="hdr-main">
+      <div class="hdr-title">MEDPAD</div>
+      <div class="hdr-ship"><span id="shipLine">U.S.S. 坚定 · 医疗舰</span><span class="ncc" id="nccLine">NCC-4747</span></div>
+    </div>
+    <button class="pill" data-act="menu-open" aria-label="打开主菜单">MENU</button>
+  </header>
+
+  <div class="menubar">
+    <span class="mb-date" id="hdrSub"></span>
+    <span class="mbar" aria-hidden="true">
+      <i style="background:var(--orange);flex:2"></i>
+      <i style="background:var(--almond);flex:1"></i>
+      <i style="background:var(--sky);flex:3"></i>
+      <i style="background:var(--lilac);flex:1"></i>
+      <i style="background:var(--violet);flex:2"></i>
+    </span>
+  </div>
+
+  <main id="app" role="main"></main>
+
+  <nav class="tabs" id="nav" role="tablist" aria-label="主导航"></nav>
+
+  <button class="fab" id="fab" data-act="med-new" aria-label="添加药品">＋</button>
+
+  <div id="layer"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+</div>
+
+<noscript>
+  <div class="empty">需要在浏览器中开启 JavaScript 才能使用。</div>
+</noscript>
+
+<script>
+(function () {
+  function panic(msg) {
+    var a = document.getElementById('app');
+    if (!a) return;
+    a.innerHTML = '<div class="empty" style="text-align:left">' +
+      '<div style="color:#CC6666;font-weight:800;font-size:15px;margin-bottom:10px">启动失败</div>' +
+      '<div style="font-size:12.5px;line-height:1.75;color:#d8d0c4;word-break:break-all">' + String(msg) + '</div>' +
+      '<button class="btn sky block" style="margin-top:14px" onclick="location.reload()">重新加载</button>' +
+      '<button class="btn ghost block" style="margin-top:8px" onclick="caches.keys().then(function(k){return Promise.all(k.map(function(x){return caches.delete(x)}))}).then(function(){location.reload()})">清掉离线缓存并重新加载</button>' +
+      '<div style="margin-top:12px;font-size:11.5px;line-height:1.7;color:#9b9187">还不行就用数据线连电脑，打开 http://localhost:8787 刷新一次。</div>' +
+      '</div>';
+  }
+  window.__medpadPanic = panic;
+  window.addEventListener('error', function (e) {
+    var t = e.target;
+    if (t && t.tagName && (t.tagName === 'SCRIPT' || t.tagName === 'LINK')) {
+      panic('资源加载失败：' + (t.src || t.href));
+      return;
+    }
+    panic('脚本出错：' + (e.message || '未知') + (e.lineno ? ('\n第 ' + e.lineno + ' 行') : ''));
+  }, true);
+  window.addEventListener('unhandledrejection', function (e) {
+    try { panic('启动过程出错：' + ((e.reason && (e.reason.message || e.reason)) || '未知')); } catch (x) { }
+  });
+  window.setTimeout(function () {
+    var a = document.getElementById('app');
+    if (a && !String(a.innerHTML).trim()) panic('页面 6 秒没有渲染出内容，多半是离线副本不完整。');
+  }, 6000);
+})();
+</script>
+<script src="js/core.js?v=22"></script>
+<script src="app.js?v=22"></script>
+</body>
+</html>
+
+
+
+
+
+
+
